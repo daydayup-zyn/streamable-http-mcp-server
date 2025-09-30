@@ -7,13 +7,13 @@ import java.util.*;
 
 /**
  *@ClassName McpServerDemo
- *@Description  TODO
+ *@Description  MCP接口服务实现
  *@Author ZhaoYanNing
  *@Date 2025/9/29 19:22
  *@Version 1.0
  */
 @Service
-public class McpServerDemo {
+public class McpDemoService {
 
     private final List<Map<String, Object>> tools = new ArrayList<>();
     private final Map<String, ToolHandler> toolHandlers = new HashMap<>();

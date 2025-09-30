@@ -9,7 +9,7 @@
 
 ## 功能特性
 
-- 兼容Spring Boot 2.1.x到3.x版本
+- 兼容Spring Boot 2.1.x版本
 - 支持通过注解方式快速创建MCP服务
 - 提供工具注册和调用机制
 - 支持JSON-RPC 2.0协议
@@ -33,18 +33,16 @@
 创建一个控制器类并使用`@EnableMcpServer`注解：
 
 ```java
-@EnableMcpServer("/mcp")
-@RestController
-public class MyMcpController extends BaseMcpController {
-    
-    @McpTool(name = "echo", description = "回显消息")
-    public Map<String, Object> echo(String message) {
-        // 实现工具逻辑
-    }
-    
-    @Override
-    protected void registerTools() {
-        // 可选：手动注册工具
+@McpServerEndpoint(
+        path = "/mcp",
+        name = "我的MCP服务",
+        version = "1.0.0"
+)
+public class MyMcpController {
+
+    @McpFunction(name = "getWeather", description = "获取天气信息")
+    public ResponseSchema getWeather(@McpParam(name = "city", description = "城市名称", required = true) String city) {
+        return ResponseSchema.text(city + ": 晴天，25℃", false);
     }
 }
 ```

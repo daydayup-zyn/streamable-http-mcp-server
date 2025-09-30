@@ -1,6 +1,6 @@
 package cn.daydayup.dev.streamable.mcp.demo.controller;
 
-import cn.daydayup.dev.streamable.mcp.demo.service.McpServerDemo;
+import cn.daydayup.dev.streamable.mcp.demo.service.McpDemoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpStatus;
@@ -14,17 +14,17 @@ import java.util.Map;
 
 /**
  * @ClassName McpEndpoint
- * @Description TODO
+ * @Description MCP接口实现
  * @Author ZhaoYanNing
  * @Date 2025/9/29 19:21
  * @Version 1.0
  */
 @RestController
 @RequestMapping("/mcp/demo1")
-public class McpEndpoint {
+public class McpDemoEndpoint {
 
     @Resource
-    private McpServerDemo server;
+    private McpDemoService server;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
