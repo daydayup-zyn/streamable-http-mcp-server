@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.daydayup.dev.streamable.mcp.starter.autoconfigure.McpServerAutoConfiguration
