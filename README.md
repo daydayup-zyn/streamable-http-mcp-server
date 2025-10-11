@@ -1,6 +1,6 @@
 # Streamable HTTP MCP Server
 
-这是一个基于HTTP协议的MCP（Model Controller Protocol）服务器实现，支持通过注解方式快速集成到Spring Boot项目中。
+这是一个基于传统HTTP REST API协议的MCP（Model Controller Protocol）服务器实现（不支持SSE流式传输），支持通过注解方式快速集成到Spring Boot项目中。
 
 ## 项目结构
 
