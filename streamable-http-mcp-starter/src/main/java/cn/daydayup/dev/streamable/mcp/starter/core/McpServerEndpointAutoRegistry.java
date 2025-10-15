@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -157,6 +158,6 @@ public class McpServerEndpointAutoRegistry implements BeanPostProcessor, Applica
         mapping.registerMapping(handleGet, bean, McpStreamableHttpHandler.class.getMethod("handleGet"));
 
         RequestMappingInfo handlePost = RequestMappingInfo.paths(path).methods(RequestMethod.POST).options(config).build();
-        mapping.registerMapping(handlePost, bean, McpStreamableHttpHandler.class.getMethod("handlePost", String.class));
+        mapping.registerMapping(handlePost, bean, McpStreamableHttpHandler.class.getMethod("handlePost", String.class, HttpServletRequest.class));
     }
 }

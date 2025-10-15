@@ -35,6 +35,36 @@ public class MyMcpController {
 
 3. 启动你的Spring Boot应用，MCP服务将在指定路径下可用。
 
+## 访问HTTP请求上下文
+
+在某些场景下，您可能需要在MCP工具方法中访问HTTP请求信息（如请求头、客户端IP等）。可以通过以下方式实现：
+
+```java
+@McpServerEndpoint(
+    path = "/mcp",
+    name = "我的MCP服务",
+    version = "1.0.0"
+)
+public class MyMcpController {
+    
+    @McpFunction(name = "getUserInfo", description = "获取用户信息")
+    public ResponseSchema getUserInfo() {
+        // 获取当前HTTP请求
+        HttpServletRequest request = McpWebUtils.getCurrentRequest();
+        
+        // 获取请求头信息
+        String userAgent = McpWebUtils.getRequestHeader("User-Agent");
+        
+        // 获取客户端IP
+        String clientIp = McpWebUtils.getClientIpAddress();
+        
+        // 使用获取到的信息
+        String userInfo = String.format("User-Agent: %s, Client IP: %s", userAgent, clientIp);
+        return ResponseSchema.text(userInfo, false);
+    }
+}
+```
+
 ## 特性
 
 - 兼容Spring Boot 2.1.x版本

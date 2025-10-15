@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.MethodNotAllowedException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -39,14 +40,17 @@ public class McpStreamableHttpHandler {
         throw new MethodNotAllowedException(HttpMethod.GET, null);
     }
 
-    public ResponseEntity<ObjectNode> handlePost(@RequestBody String body) throws Exception {
+    public ResponseEntity<ObjectNode> handlePost(@RequestBody String body, HttpServletRequest request) throws Exception {
         try {
-            ObjectNode request = objectMapper.readValue(body, ObjectNode.class);
-            if (request == null || !request.has("id")) {
+            // 设置当前请求上下文
+            McpRequestContextHolder.setRequest(request);
+            
+            ObjectNode requestNode = objectMapper.readValue(body, ObjectNode.class);
+            if (requestNode == null || !requestNode.has("id")) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
             }
-            String id = request.get("id").asText();
-            String method = request.get("method").asText();
+            String id = requestNode.get("id").asText();
+            String method = requestNode.get("method").asText();
 
             switch (method) {
                 case "initialize":
@@ -54,7 +58,7 @@ public class McpStreamableHttpHandler {
                 case "tools/list":
                     return handleListTools(id);
                 case "tools/call":
-                    return handleCallTool(request);
+                    return handleCallTool(requestNode);
                 case "ping":
                     return handlePing(id);
                 default:
@@ -62,6 +66,9 @@ public class McpStreamableHttpHandler {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } finally {
+            // 清除请求上下文
+            McpRequestContextHolder.clear();
         }
     }
 

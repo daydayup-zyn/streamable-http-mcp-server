@@ -3,7 +3,9 @@ package cn.daydayup.dev.streamable.mcp.demo.controller;
 import cn.daydayup.dev.streamable.mcp.starter.annotation.McpFunction;
 import cn.daydayup.dev.streamable.mcp.starter.annotation.McpParam;
 import cn.daydayup.dev.streamable.mcp.starter.annotation.McpServerEndpoint;
+import cn.daydayup.dev.streamable.mcp.starter.core.McpWebUtils;
 import cn.daydayup.dev.streamable.mcp.starter.response.ResponseSchema;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 使用starter的MCP服务示例
@@ -13,6 +15,11 @@ public class McpServerStarterEndpoint {
 
     @McpFunction(name = "getWeather", description = "获取天气信息")
     public ResponseSchema getWeather(@McpParam(name = "city", description = "城市名称", required = true) String city) {
+        HttpServletRequest request = McpWebUtils.getCurrentRequest();
+        if (request != null) {
+            String cookie = request.getHeader("Cookie");
+            System.out.println(cookie);
+        }
         return ResponseSchema.text(String.format("%s: 晴天，温度25℃", city),false);
     }
 
