@@ -40,27 +40,20 @@ public class MyMcpController {
 在某些场景下，您可能需要在MCP工具方法中访问HTTP请求信息（如请求头、客户端IP等）。可以通过以下方式实现：
 
 ```java
+@Slf4j
 @McpServerEndpoint(
-    path = "/mcp",
-    name = "我的MCP服务",
-    version = "1.0.0"
+        path = "/mcp",
+        name = "我的MCP服务",
+        version = "1.0.0"
 )
 public class MyMcpController {
-    
-    @McpFunction(name = "getUserInfo", description = "获取用户信息")
-    public ResponseSchema getUserInfo() {
-        // 获取当前HTTP请求
+
+    @McpFunction(name = "getWeather", description = "获取天气信息")
+    public ResponseSchema getWeather(@McpParam(name = "city", description = "城市名称", required = true) String city) {
         HttpServletRequest request = McpWebUtils.getCurrentRequest();
-        
-        // 获取请求头信息
-        String userAgent = McpWebUtils.getRequestHeader("User-Agent");
-        
-        // 获取客户端IP
-        String clientIp = McpWebUtils.getClientIpAddress();
-        
-        // 使用获取到的信息
-        String userInfo = String.format("User-Agent: %s, Client IP: %s", userAgent, clientIp);
-        return ResponseSchema.text(userInfo, false);
+        String cookie = request.getHeader("Cookie");
+        log.info("Cookie: {}", cookie);
+        return ResponseSchema.text(city + ": 晴天，25℃", false);
     }
 }
 ```

@@ -30,7 +30,7 @@
 
 ### 创建MCP服务
 
-创建一个控制器类并使用`@EnableMcpServer`注解：
+创建一个控制器类并使用`@McpServerEndpoint`注解：
 
 ```java
 @McpServerEndpoint(
