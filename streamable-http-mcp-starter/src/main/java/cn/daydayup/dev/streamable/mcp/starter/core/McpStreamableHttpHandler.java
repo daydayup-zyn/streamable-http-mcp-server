@@ -147,7 +147,7 @@ public class McpStreamableHttpHandler {
                             continue;
                         }
                         ObjectNode paramNode = properties.putObject(paramInfo.getName());
-                        paramNode.put("type", "string");
+                        paramNode.put("type", getJsonSchemaType(paramInfo.getType()));
                         paramNode.put("description", paramInfo.getDescription());
 
                         // 如果有枚举值，添加枚举值
@@ -217,9 +217,10 @@ public class McpStreamableHttpHandler {
                 for (int i = 0; i < parameters.length; i++) {
                     McpFunctionInfo.ParamInfo paramInfo = targetFunction.getParams().get(i);
                     String paramName = paramInfo.getName();
+                    Class<?> paramType = parameters[i].getType();
 
                     if (params != null && params.has(paramName)) {
-                        args[i] = params.get(paramName).asText();
+                        args[i] = convertParamValue(params.get(paramName).asText(), paramType);
                     } else if (paramInfo.isRequired()) {
                         // 必需参数缺失
                         log.warn("缺少必需参数: {}", paramName);
@@ -269,5 +270,66 @@ public class McpStreamableHttpHandler {
         response.put("result",objectMapper.createObjectNode());
 
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 根据参数类型获取对应的JSON Schema类型
+     *
+     * @param type 参数类型
+     * @return JSON Schema类型字符串
+     */
+    private String getJsonSchemaType(Class<?> type) {
+        if (String.class.equals(type)) {
+            return "string";
+        } else if (Double.class.equals(type) || double.class.equals(type)) {
+            return "double";
+        } else if (Float.class.equals(type) || float.class.equals(type)) {
+            return "float";
+        } else if (Integer.class.equals(type) || int.class.equals(type)) {
+            return "integer";
+        } else if (Long.class.equals(type) || long.class.equals(type)) {
+            return "long";
+        } else if (Boolean.class.equals(type) || boolean.class.equals(type)) {
+            return "boolean";
+        } else {
+            // 默认返回string类型
+            return "string";
+        }
+    }
+
+    /**
+     * 根据目标参数类型转换参数值
+     *
+     * @param value 参数值（字符串形式）
+     * @param targetType 目标类型
+     * @return 转换后的参数值
+     */
+    private Object convertParamValue(String value, Class<?> targetType) {
+        if (value == null) {
+            return null;
+        }
+        
+        try {
+            if (String.class.equals(targetType)) {
+                return value;
+            } else if (Double.class.equals(targetType) || double.class.equals(targetType)) {
+                return Double.parseDouble(value);
+            } else if (Float.class.equals(targetType) || float.class.equals(targetType)) {
+                return Float.parseFloat(value);
+            } else if (Integer.class.equals(targetType) || int.class.equals(targetType)) {
+                return Integer.parseInt(value);
+            } else if (Long.class.equals(targetType) || long.class.equals(targetType)) {
+                return Long.parseLong(value);
+            } else if (Boolean.class.equals(targetType) || boolean.class.equals(targetType)) {
+                return Boolean.parseBoolean(value);
+            } else {
+                // 默认返回原始字符串
+                return value;
+            }
+        } catch (NumberFormatException e) {
+            // 类型转换失败时返回原始字符串值
+            log.warn("参数类型转换失败: value={}, targetType={}", value, targetType.getSimpleName(), e);
+            return value;
+        }
     }
 }

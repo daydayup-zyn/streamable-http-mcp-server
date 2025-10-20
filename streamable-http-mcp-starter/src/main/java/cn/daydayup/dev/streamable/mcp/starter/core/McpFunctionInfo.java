@@ -34,12 +34,14 @@ public class McpFunctionInfo {
         private final String   description;
         private final String[] enums;
         private final boolean  required;
+        private final Class<?> type;
 
-        public ParamInfo(String name, String description, String[] enums, boolean required) {
+        public ParamInfo(String name, String description, String[] enums, boolean required, Class<?> type) {
             this.name = name;
             this.description = description;
             this.enums = enums;
             this.required = required;
+            this.type = type;
         }
     }
 }

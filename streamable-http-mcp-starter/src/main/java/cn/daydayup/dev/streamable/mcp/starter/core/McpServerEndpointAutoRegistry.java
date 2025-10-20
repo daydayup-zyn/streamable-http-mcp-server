@@ -134,7 +134,7 @@ public class McpServerEndpointAutoRegistry implements BeanPostProcessor, Applica
             if (mcpParam != null) {
                 // 构建参数信息对象
                 McpFunctionInfo.ParamInfo paramInfo = new McpFunctionInfo.ParamInfo(
-                        mcpParam.name(), mcpParam.description(), mcpParam.enums(), mcpParam.required());
+                        mcpParam.name(), mcpParam.description(), mcpParam.enums(), mcpParam.required(), parameter.getType());
                 paramInfos.add(paramInfo);
             }
         }
