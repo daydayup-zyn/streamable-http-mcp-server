@@ -282,13 +282,13 @@ public class McpStreamableHttpHandler {
         if (String.class.equals(type)) {
             return "string";
         } else if (Double.class.equals(type) || double.class.equals(type)) {
-            return "double";
+            return "number";
         } else if (Float.class.equals(type) || float.class.equals(type)) {
-            return "float";
+            return "number";
         } else if (Integer.class.equals(type) || int.class.equals(type)) {
             return "integer";
         } else if (Long.class.equals(type) || long.class.equals(type)) {
-            return "long";
+            return "number";
         } else if (Boolean.class.equals(type) || boolean.class.equals(type)) {
             return "boolean";
         } else {
