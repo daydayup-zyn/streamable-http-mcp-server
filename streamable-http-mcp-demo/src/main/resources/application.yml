@@ -1,2 +1,6 @@
 server:
   port: 9098
+
+web:
+  search:
+    key: your-tavily-api-key-here

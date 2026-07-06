@@ -134,12 +134,13 @@ public class McpStreamableHttpHandler {
                 tool.put("name", functionInfo.getName());
                 tool.put("description", functionInfo.getDescription());
 
-                // 添加必需参数列表
+                // 添加 inputSchema（MCP 规范要求即使无参数也必须存在）
+                ObjectNode paramsNode = tool.putObject("inputSchema");
+                paramsNode.put("type", "object");
+                ObjectNode properties = paramsNode.putObject("properties");
+
+                // 添加参数信息
                 if (functionInfo.getParams() != null && !functionInfo.getParams().isEmpty()) {
-                    // 添加参数信息
-                    ObjectNode paramsNode = tool.putObject("inputSchema");
-                    paramsNode.put("type", "object");
-                    ObjectNode properties = paramsNode.putObject("properties");
                     List<String> required = new ArrayList<>();
 
                     for (McpFunctionInfo.ParamInfo paramInfo : functionInfo.getParams()) {
